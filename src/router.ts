@@ -3,6 +3,7 @@ import { handleOptions, handleMethodNotAllowed, cors } from './lib/cors';
 import { handleChatCompletion } from './handlers/chat';
 import { handlePodcastEmbeddings } from './handlers/podcasts';
 import { handlePodcastSearch } from './handlers/search';
+import { handleEmbeddingGeneration } from './handlers/embeddings';
 
 export async function handleRequest(request: Request, env: Env): Promise<Response> {
 	const url = new URL(request.url);
@@ -31,6 +32,12 @@ export async function handleRequest(request: Request, env: Env): Promise<Respons
 				return handleMethodNotAllowed(request.method);
 			}
 			return handlePodcastSearch(request, env);
+
+		case '/api/embeddings':
+			if (request.method !== 'POST') {
+				return handleMethodNotAllowed(request.method);
+			}
+			return handleEmbeddingGeneration(request, env);
 
 		default:
 			return new Response(JSON.stringify({ error: 'Not Found' }), { status: 404, headers: cors });
