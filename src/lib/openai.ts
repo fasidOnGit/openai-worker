@@ -26,11 +26,11 @@ export async function createChatCompletion(messages: OpenAI.Chat.ChatCompletionM
 	const openai = createOpenAIClient(env);
 
 	const response = await openai.chat.completions.create({
-		model: 'gpt-4o-mini',
+		model: 'gpt-4o',
 		messages,
-		temperature: 1.1,
+		temperature: 0.5,
 		presence_penalty: 0,
-		frequency_penalty: 0,
+		frequency_penalty: 0.5,
 	});
 
 	return response.choices[0].message.content;
