@@ -1,0 +1,27 @@
+name = "openai-worker"
+main = "src/index.ts"
+compatibility_date = "2025-07-10"
+
+[vars]
+# You can define environment variables here, but for sensitive data use `wrangler secret`
+# Example: PUBLIC_API_URL = "https://api.example.com"
+
+# Development environment
+[env.development]
+# Development-specific variables
+vars = { }
+
+# Production environment
+[env.production]
+# Production-specific variables
+vars = { }
+
+# Staging environment
+[env.staging]
+# Staging-specific variables
+vars = { }
+
+# For local development, create a .dev.vars file with these variables:
+# OPENAI_API_KEY=your_key_here
+# SUPABASE_URL=your_url_here
+# SUPABASE_ANON_KEY=your_key_here 

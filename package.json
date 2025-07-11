@@ -17,6 +17,7 @@
 	},
 	"dependencies": {
 		"@supabase/supabase-js": "^2.50.5",
+		"langchain": "^0.3.29",
 		"openai": "^5.8.3"
 	}
 }

@@ -1,0 +1,52 @@
+E-Commerce Platform with Modular Architecture
+
+Project Overview
+
+This project involved building a comprehensive e-commerce platform designed to serve multiple merchants, each with their own storefront. The platform was developed to provide merchants with an easy-to-use admin portal for managing products, categories, and orders, while offering customers an engaging storefront experience.
+
+Dual Application Structure
+
+The platform consisted of two main applications:
+
+1. Admin Portal: This application allowed merchants to manage their product listings, categories, and orders. It served as the control center for all merchant operations.
+
+2. Storefront: This customer-facing application displayed the products and allowed customers to browse, add items to their cart, and place orders. Orders placed on the storefront were reflected in the admin portal for processing.
+
+Unified Codebase with Nx
+
+To avoid redundancy and ensure consistency across the admin portal and the storefront, the project was architected using Nx, a powerful monorepo tool. This allowed for a modular structure, where common features and business logic were encapsulated into reusable libraries. These libraries acted like building blocks, ensuring that any feature developed once could be leveraged in both applications without duplication.
+
+Tech Stack
+
+- Front-End: Angular, NgRx for state management, Angular Material for UI components.
+- Monorepo Management: Nx, enabling a modular and scalable codebase.
+- Back-End: Java with a MySQL database.
+
+Modular Libraries
+
+The use of Nx allowed the creation of multiple domain-specific libraries, such as:
+
+- Product Library
+- Cart Library
+- Order Library
+- Category Library
+
+These libraries ensured consistency and code reusability, acting as the foundation for both the admin portal and the storefront. By doing so, any updates or new features added to these libraries were automatically reflected in both applications.
+
+Micro-Frontend Architecture
+
+To provide a customizable experience for merchants, a micro-frontend approach was adopted. This allowed for a widget-based system where merchants could customize their storefront landing pages by dragging and dropping widgets. These configurations were stored as JSON and hosted on a cloud service like S3, making the UI highly configurable and unique for each merchant.
+
+The micro-frontend approach also ensured that the same landing page could be loaded in both the admin portal (in edit mode) and the storefront (in view mode), providing a seamless experience for both merchants and customers.
+
+Common Component Library
+
+To maintain a consistent design and user experience across the platform, a shared component library was implemented. This library provided a unified set of UI components used throughout both applications, improving maintainability and design coherence.
+
+Summary
+
+Domain: E-commerce, multi-tenant platforms, modular UI
+Architecture: Monorepo with Nx, micro-frontends, shared libraries
+Tech Stack: Angular, NgRx, Angular Material, Java, MySQL, S3
+Key Features: Admin portal, storefront, widget-based landing page builder
+Outcome: Scalable, maintainable, and merchant-customizable platform

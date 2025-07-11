@@ -4,6 +4,7 @@ import { handleChatCompletion } from './handlers/chat';
 import { handlePodcastEmbeddings } from './handlers/podcasts';
 import { handlePodcastSearch } from './handlers/search';
 import { handleEmbeddingGeneration } from './handlers/embeddings';
+import { handleBeginInsightsEmbeddings, handleSearchInsights } from './handlers/professional_insights';
 
 export async function handleRequest(request: Request, env: Env): Promise<Response> {
 	const url = new URL(request.url);
@@ -13,6 +14,7 @@ export async function handleRequest(request: Request, env: Env): Promise<Respons
 		return handleOptions();
 	}
 
+	console.log(`Starting to handle ${url.pathname}`, { env });
 	// Route handling
 	switch (url.pathname) {
 		case '/api/chat':
@@ -38,6 +40,18 @@ export async function handleRequest(request: Request, env: Env): Promise<Respons
 				return handleMethodNotAllowed(request.method);
 			}
 			return handleEmbeddingGeneration(request, env);
+		
+		case `/api/begin-insights-embeddings`:
+			if (request.method !== 'POST') {
+				return handleMethodNotAllowed(request.method);
+			}
+			return handleBeginInsightsEmbeddings(request, env);
+
+		case `/api/professional-insights/search`:
+			if (request.method !== 'GET') {
+				return handleMethodNotAllowed(request.method);
+			}
+			return handleSearchInsights(request, env);
 
 		default:
 			return new Response(JSON.stringify({ error: 'Not Found' }), { status: 404, headers: cors });
