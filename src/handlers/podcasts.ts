@@ -1,7 +1,7 @@
-import { OpenAI } from 'openai';
 import type { CreateDocument, Env } from '../types';
 import { insertDocument } from '../lib/supabase';
 import { cors } from '../lib/cors';
+import { createEmbedding } from '../lib/openai';
 
 export async function handlePodcastEmbeddings(request: Request, env: Env): Promise<Response> {
 	let contents: string[] | undefined;
@@ -29,28 +29,15 @@ export async function handlePodcastEmbeddings(request: Request, env: Env): Promi
 		);
 	}
 
-	const openai = new OpenAI({
-		apiKey: env.OPENAI_API_KEY,
-		baseURL: 'https://gateway.ai.cloudflare.com/v1/0c3eee58953174451139be1ea94076a8/stock-predictions/openai',
-	});
-
 	try {
 		const results = await Promise.all(
-			contents.map(async (content) => {
-				const embeddingResponse = await openai.embeddings.create({
-					model: 'text-embedding-3-small',
-					input: content,
-					encoding_format: 'float',
-				});
-
-				return {
-					content,
-					embedding: embeddingResponse.data[0].embedding,
-				} satisfies CreateDocument;
+			contents.map(async (content): Promise<CreateDocument> => {
+				const embedding = await createEmbedding(content, env);
+				return { content, embedding };
 			})
 		);
-        await insertDocument(results, env);
 
+		await insertDocument(results, env);
 		return new Response(null, { status: 201, headers: cors });
 	} catch (error: any) {
 		return new Response(JSON.stringify({ error: error.message }), { status: 500, headers: cors });

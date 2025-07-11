@@ -4,14 +4,23 @@ export interface Env {
 	SUPABASE_ANON_KEY: string;
 }
 
-export interface CreateDocument {
-	content: string;
-	embedding: number[];
-}
-
-export interface Document extends CreateDocument {
+export interface Document {
 	id: number;
 	created_at: string;
+	content: string;
+	embedding: number[];
+	similarity?: number;
 }
 
-export type Documents = Document[];
+export type CreateDocument = Omit<Document, 'id' | 'created_at'>;
+
+export interface DocumentSearchResult extends Document {
+	similarity: number;
+}
+
+export type DocumentSearchResults = DocumentSearchResult[];
+
+export interface SearchOptions {
+	match_threshold?: number;
+	match_count?: number;
+}
