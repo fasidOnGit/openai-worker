@@ -8,10 +8,7 @@ export async function handlePodcastSearch(request: Request, env: Env): Promise<R
 	const query = url.searchParams.get('query');
 
 	if (!query) {
-		return new Response(
-			JSON.stringify({ error: 'Missing required "query" parameter' }),
-			{ status: 400, headers: cors }
-		);
+		return new Response(JSON.stringify({ error: 'Missing required "query" parameter' }), { status: 400, headers: cors });
 	}
 
 	try {
@@ -32,27 +29,30 @@ export async function handlePodcastSearch(request: Request, env: Env): Promise<R
 			env
 		);
 
-        const results = await createChatCompletion([
-            {
-                role: 'system',
-                content: `
+		const results = await createChatCompletion(
+			[
+				{
+					role: 'system',
+					content: `
                 You are an enthusiastic podcast expert who loves recommending podcasts to people. You will be given two pieces of information - some context about podcasts episodes and a question. Your main job is to formulate a short answer to the question using the provided context. If you are unsure and cannot find the answer in the context, say, "Sorry, I don't know the answer." Please do not make up the answer.
                 `,
-            },
-            {
-                role: 'user',
-                content: `
+				},
+				{
+					role: 'user',
+					content: `
                 Here is the context about podcasts episodes:
                 ${matchedDocuments.map((doc) => doc.content).join('\n')}
 
                 Here is the question:
                 ${query}
-                `
-            }
-        ], env)
+                `,
+				},
+			],
+			env
+		);
 
-		return new Response(JSON.stringify({ response: results }), { headers: cors });
+		return new Response(JSON.stringify({ response: results, podcasts: matchedDocuments.map((doc) => doc.content) }), { headers: cors });
 	} catch (error: any) {
 		return new Response(JSON.stringify({ error: error.message }), { status: 500, headers: cors });
 	}
-} 
+}
